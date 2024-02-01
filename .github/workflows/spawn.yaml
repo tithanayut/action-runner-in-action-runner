@@ -9,13 +9,16 @@ jobs:
     steps:
       - name: Request registration token
         run: |
-          response=$(curl -s -L -X POST \
+          RESPONSE=$(curl -s -L -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/tithanayut/private_repo/actions/runners/registration-token)
-          token=$(jq -r '.token' <<< "${response}")
-          echo $token
+          echo "RUNNER_TOKEN=$(jq -r '.token' <<< $RESPONSE)" >> $GITHUB_ENV
+
+      - name: Output
+        run: |
+          echo ${{ env.RUNNER_TOKEN }}
     
       # - name: Setup runner
       #   run: |

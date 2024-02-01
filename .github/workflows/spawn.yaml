@@ -5,7 +5,7 @@ on:
 jobs:
   spawn:
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 10
     steps:
       - name: Request registration token
         run: |
@@ -16,15 +16,11 @@ jobs:
             https://api.github.com/repos/tithanayut/private_repo/actions/runners/registration-token)
           echo "RUNNER_TOKEN=$(jq -r '.token' <<< $RESPONSE)" >> $GITHUB_ENV
 
-      - name: Output
+      - name: Setup runner
         run: |
-          echo ${{ env.RUNNER_TOKEN }}
-    
-      # - name: Setup runner
-      #   run: |
-      #     mkdir actions-runner && cd actions-runner
-      #     curl -o actions-runner-linux-x64-2.312.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.312.0/actions-runner-linux-x64-2.312.0.tar.gz
-      #     echo "85c1bbd104d539f666a89edef70a18db2596df374a1b51670f2af1578ecbe031  actions-runner-linux-x64-2.312.0.tar.gz" | shasum -a 256 -c
-      #     tar xzf ./actions-runner-linux-x64-2.312.0.tar.gz
-      #     ./config.sh --url https://github.com/tithanayut/private_repo --token AHJCZ5E6NKW6LGKIIKF6AWDFXMKAQ
-      #     ./run.sh
+          mkdir actions-runner && cd actions-runner
+          curl -o actions-runner-linux-x64-2.312.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.312.0/actions-runner-linux-x64-2.312.0.tar.gz
+          tar xzf ./actions-runner-linux-x64-2.312.0.tar.gz
+          ./config.sh --url https://github.com/tithanayut/private_repo --token ${{ env.RUNNER_TOKEN }}
+          ./run.sh --once
+  

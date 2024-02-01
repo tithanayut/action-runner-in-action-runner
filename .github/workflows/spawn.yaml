@@ -13,7 +13,7 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/tithanayut/private_repo/actions/runners/registration-token)
+            https://api.github.com/repos/thana-org/test/actions/runners/registration-token)
           echo "RUNNER_TOKEN=$(jq -r '.token' <<< $RESPONSE)" >> $GITHUB_ENV
 
       - name: Spawn ephemeral runner

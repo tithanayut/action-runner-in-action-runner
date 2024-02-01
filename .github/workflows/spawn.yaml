@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Request registration token
+      - name: Request runner registration token
         run: |
           RESPONSE=$(curl -s -L -X POST \
             -H "Accept: application/vnd.github+json" \
@@ -16,11 +16,11 @@ jobs:
             https://api.github.com/repos/tithanayut/private_repo/actions/runners/registration-token)
           echo "RUNNER_TOKEN=$(jq -r '.token' <<< $RESPONSE)" >> $GITHUB_ENV
 
-      - name: Setup runner
+      - name: Setup ephemeral runner
         run: |
           mkdir actions-runner && cd actions-runner
           curl -o actions-runner-linux-x64-2.312.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.312.0/actions-runner-linux-x64-2.312.0.tar.gz
           tar xzf ./actions-runner-linux-x64-2.312.0.tar.gz
-          ./config.sh --url https://github.com/tithanayut/private_repo --token ${{ env.RUNNER_TOKEN }}
-          ./run.sh --once
+          ./config.sh --url https://github.com/tithanayut/private_repo --token ${{ env.RUNNER_TOKEN }} --ephemeral
+          ./run.sh
   

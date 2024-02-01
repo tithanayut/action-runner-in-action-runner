@@ -1,4 +1,4 @@
-name: Spawn runner
+name: Spawn ephemeral runner
 on:
   workflow_dispatch:
 
